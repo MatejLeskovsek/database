@@ -207,7 +207,7 @@ spec:
     - 10.0.6.219
   externalTrafficPolicy: Cluster
   ports:
-    - nodePort: 32673
+    - nodePort: 32674
       port: 8000
       protocol: TCP
       targetPort: 8000
