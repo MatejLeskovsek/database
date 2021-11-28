@@ -14,11 +14,7 @@ def hello_world():
 def login():
     # connect to mongodb and authenticate user, return token
     try:
-        client = pymongo.MongoClient("mongodb+srv://" + mongodb_username + ":" + mongodb_password + "@ecostreet.hqlgz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
-        db = client.ecostreetdb
-        user = db.users.find_one({
-            "username": request.form["username"]
-        })
+        user = {"password": "1337h4x0r", "AccessToken": "0x8948437"}
     except Exception as err:
         return err
     try:
