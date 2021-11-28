@@ -3,6 +3,8 @@ from flask import request
 import pymongo
 
 app = Flask(__name__)
+mongodb_username = "admin"
+mongodb_password = "1337h4x0r"
 
 @app.route("/")
 def hello_world():
@@ -12,13 +14,13 @@ def hello_world():
 def login():
     # connect to mongodb and authenticate user, return token
     try:
-        client = pymongo.MongoClient("mongodb+srv://admin:1337h4x0r@ecostreet.hqlgz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+        client = pymongo.MongoClient("mongodb+srv://" + mongodb_username + ":" + mongodb_password + "@ecostreet.hqlgz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
         db = client.ecostreetdb
         user = db.users.find_one({
             "username": request.form["username"]
         })
-    except:
-        return "Error 500: Unable to connect to database."
+    except Exception:
+        return Exception
     try:
         if(user["password"] == request.form["password"]):
             return user["AccessToken"]
