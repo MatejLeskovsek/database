@@ -204,7 +204,7 @@ metadata:
 spec:
   clusterIP: 10.87.1.10
   clusterIPs:
-    - 10.87.0.10
+    - 10.87.1.10
   externalTrafficPolicy: Cluster
   ports:
     - nodePort: 32675
