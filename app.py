@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 import pymongo
+import requests
 
 app = Flask(__name__)
 mongodb_username = "admin"
@@ -19,13 +20,13 @@ def login():
         user = db.users.find_one({
             "username": request.form["username"]
         })
+        try:
+            if(user["password"] == request.form["password"]):
+                return user["AccessToken"]
+            else:
+                return "Error 401: Unauthorized. Login Incorrect."
+        except:
+            return "Error 404: User Not Found."
     except Exception as err:
         return err
-    try:
-        if(user["password"] == request.form["password"]):
-            return user["AccessToken"]
-        else:
-            return "Error 401: Unauthorized. Login Incorrect."
-    except:
-        return "Error 404: User Not Found."
 
