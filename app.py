@@ -10,4 +10,4 @@ def hello_world():
 @app.route('/authenticate', methods = ['POST'])
 def login():
     # connect to mongodb and authenticate user, return token
-    return("200 OK")
+    return("200OK")
