@@ -19,8 +19,8 @@ def login():
         user = db.users.find_one({
             "username": request.form["username"]
         })
-    except Exception:
-        return Exception
+    except Exception as err:
+        return err
     try:
         if(user["password"] == request.form["password"]):
             return user["AccessToken"]
