@@ -29,7 +29,7 @@ metadata:
                 'f:app': {}
             'f:spec':
               'f:containers':
-                'k:{"name":"ecostreet-sha256-1"}':
+                'k:{"name":"database-sha256-1"}':
                   .: {}
                   'f:image': {}
                   'f:imagePullPolicy': {}
@@ -105,7 +105,7 @@ apiVersion: autoscaling/v2beta1
 kind: HorizontalPodAutoscaler
 metadata:
   labels:
-    app: ecostreet-core
+    app: database-core
   managedFields:
     - apiVersion: autoscaling/v2beta1
       fieldsType: FieldsV1
@@ -212,6 +212,6 @@ spec:
       protocol: TCP
       targetPort: 5000
   selector:
-    app: ecostreet-core
+    app: database-core
   sessionAffinity: None
   type: LoadBalancer
