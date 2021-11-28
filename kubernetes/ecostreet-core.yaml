@@ -202,9 +202,9 @@ metadata:
   name: database-core-service
   namespace: ecostreet
 spec:
-  clusterIP: 10.0.6.219
+  clusterIP: 10.0.6.220
   clusterIPs:
-    - 10.0.6.219
+    - 10.0.6.220
   externalTrafficPolicy: Cluster
   ports:
     - nodePort: 32674
