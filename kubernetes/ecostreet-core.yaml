@@ -208,9 +208,9 @@ spec:
   externalTrafficPolicy: Cluster
   ports:
     - nodePort: 32674
-      port: 8000
+      port: 5000
       protocol: TCP
-      targetPort: 8000
+      targetPort: 5000
   selector:
     app: ecostreet-core
   sessionAffinity: None
