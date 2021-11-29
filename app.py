@@ -7,6 +7,8 @@ app = Flask(__name__)
 mongodb_username = "admin"
 mongodb_password = "1337h4x0r"
 
+user = {"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}
+
 @app.route("/")
 def hello_world():
     return "Database microservice."
@@ -15,11 +17,12 @@ def hello_world():
 def login():
     # connect to mongodb and authenticate user, return token
     try:
-        client = pymongo.MongoClient("mongodb+srv://admin:1337h4x0r@mongo/myFirstDatabase?retryWrites=true&w=majority")
-        db = client.ecostreetdb
-        user = db.users.find_one({
-            "username": request.form["username"]
-        })
+        #client = pymongo.MongoClient("mongodb+srv://admin:1337h4x0r@mongo/myFirstDatabase?retryWrites=true&w=majority")
+        #db = client.ecostreetdb
+        #user = db.users.find_one({
+        #    "username": request.form["username"]
+        #})
+        
         try:
             if(user["password"] == request.form["password"]):
                 return user["AccessToken"]
