@@ -230,9 +230,9 @@ spec:
   egress:
   - to:
     - ipBlock:
-        cidr: 10.0.0.0/24
+        cidr: 10.40.0.0/14
         except:
-        - 10.40.0.0/20
+        - 10.40.1.0/12
     ports:
     - protocol: TCP
       port: 27017
