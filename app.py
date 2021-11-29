@@ -28,5 +28,5 @@ def login():
         except:
             return "Error 404: User Not Found."
     except Exception as err:
-        return "Something went wrong here"
+        return err
 
