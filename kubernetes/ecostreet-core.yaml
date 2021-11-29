@@ -216,17 +216,23 @@ spec:
   sessionAffinity: None
   type: LoadBalancer
 ---
-kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
 metadata:
-  name: allow-internet-only
+  name: test-network-policy
+  namespace: ecostreet
 spec:
-  podSelector: {}
+  podSelector:
+    matchLabels:
+      app: database-core
   policyTypes:
-    - Egress
+  - Egress
   egress:
-    - to:
-      - ipBlock:
-        cidr: 0.0.0.0/0
-          except:
-            - 10.0.0.0/8
+  - to:
+    - ipBlock:
+        cidr: 10.0.0.0/24
+        except:
+        - 10.40.0.0/20
+    ports:
+    - protocol: TCP
+      port: 27017
