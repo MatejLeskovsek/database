@@ -215,13 +215,3 @@ spec:
     app: database-core
   sessionAffinity: None
   type: LoadBalancer
----
-apiVersion: v1
-kind: Endpoints
-metadata:
-  name: mongo
-subsets:
-  - addresses:
-    - ip: mongodb+srv://admin:1337h4x0r@ecostreet.hqlgz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-    ports:
-    - port: 27017
