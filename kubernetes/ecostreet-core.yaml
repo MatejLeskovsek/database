@@ -217,9 +217,11 @@ spec:
   type: LoadBalancer
 ---
 apiVersion: v1
-kind: Service
+kind: Endpoints
 metadata:
   name: mongo
-spec:
-  type: ExternalName
-  externalName: ecostreet.hqlgz.mongodb.net
+subsets:
+  - addresses:
+    - ip: mongodb+srv://admin:1337h4x0r@ecostreet.hqlgz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+    ports:
+    - port: 27017
