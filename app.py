@@ -7,7 +7,7 @@ app = Flask(__name__)
 mongodb_username = "admin"
 mongodb_password = "1337h4x0r"
 
-user = {"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}
+users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
 
 @app.route("/")
 def hello_world():
@@ -22,7 +22,10 @@ def login():
         #user = db.users.find_one({
         #    "username": request.form["username"]
         #})
-        
+        user = None
+        for suser in users:
+            if suser["username"] == request.form["username"]:
+                user = suser
         try:
             if(user["password"] == request.form["password"]):
                 return user["AccessToken"]
@@ -32,4 +35,8 @@ def login():
             return "Error 404: User Not Found."
     except Exception as err:
         return err
+    
+@app.route('/config', methods = ['POST'])
+def config():
+    return 200
 
