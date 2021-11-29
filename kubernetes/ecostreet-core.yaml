@@ -215,24 +215,3 @@ spec:
     app: database-core
   sessionAffinity: None
   type: LoadBalancer
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: test-network-policy
-  namespace: ecostreet
-spec:
-  podSelector:
-    matchLabels:
-      app: database-core
-  policyTypes:
-  - Egress
-  egress:
-  - to:
-    - ipBlock:
-        cidr: 10.0.0.0/24
-        except:
-        - 10.40.0.0/14
-    ports:
-    - protocol: TCP
-      port: 27017
