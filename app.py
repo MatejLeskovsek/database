@@ -125,9 +125,9 @@ def get_health():
         return "HEALTH CHECK FAIL: login service unavailable"
     end2 = datetime.datetime.now()
     
-    delta1 = start-end
+    delta1 = end-start
     crt = delta1.total_seconds() * 1000
-    delta2 = start2-end2
+    delta2 = end2-start2
     lrt = delta2.total_seconds() * 1000
     health = {"health check": "successful", "configuration response time": crt, "login response time": lrt}
     return str(health)
