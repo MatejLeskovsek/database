@@ -51,10 +51,11 @@ def config_update():
             ecostreet_core_service = ms_ip
         if microservice == "configuration_core_service":
             configuration_core_service = ms_ip
+        return "200 OK"
     except Exception as err:
         return err
 
 @app.route("/getconfig")
 def get_config():
-    return [ecostreet_core_service, configuration_core_service]
+    return str([ecostreet_core_service, configuration_core_service])
 
