@@ -13,11 +13,13 @@ configuration_core_service = "192.168.1.121"
 
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
 
+# HOME PAGE
 @app.route("/")
 def hello_world():
     return "Database microservice."
 
-@app.route('/authenticate', methods = ['POST'])
+# USER AUTHENTICATION - DATABASE MOCKUP
+@app.route('/login', methods = ['POST'])
 def login():
     global ecostreet_core_service
     global configuration_core_service
@@ -38,7 +40,18 @@ def login():
             return "Error 404: User Not Found."
     except Exception as err:
         return err
-    
+
+# COMMAND AUTHENTICATION FUNCTION
+@app.route("/authenticate", methods = ['POST'])
+def authenticate_request():
+    global users
+    for suser in users:
+        if suser["AccessToken"] == request.form["AccessToken"]:
+            return "200 OK"
+    return "401 UNAUTHORIZED"
+
+ 
+# SERVICE IP UPDATE FUNCTION
 @app.route("/update_ip", methods = ['POST'])
 def update_ip():
     global ecostreet_core_service
@@ -54,6 +67,7 @@ def update_ip():
     response = requests.post(url, data=data)
     return response.text
 
+# FUNCTION TO UPDATE IP'S OF OTHER SERVICES
 @app.route("/config", methods = ['POST'])
 def config_update():
     global ecostreet_core_service
@@ -73,6 +87,7 @@ def config_update():
     except Exception as err:
         return err
 
+# FUNCTION TO GET CURRENT CONFIG
 @app.route("/getconfig")
 def get_config():
     global ecostreet_core_service
