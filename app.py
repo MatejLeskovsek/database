@@ -17,15 +17,15 @@ def hello_world():
 def login():
     # connect to mongodb and authenticate user, return token
     try:
-        #client = pymongo.MongoClient("mongo") 
-        #db = client.ecostreetdb
-        #user = db.users.find_one({
-        #    "username": request.form["username"]
-        #})
-        user = None
-        for suser in users:
-            if suser["username"] == request.form["username"]:
-                user = suser
+        client = pymongo.MongoClient("mongodb+srv://" + mongodb_username + ":" + mongodb_password + "@ecostreet.hqlgz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority") 
+        db = client.ecostreetdb
+        user = db.users.find_one({
+            "username": request.form["username"]
+        })
+        #user = None
+        #for suser in users:
+        #    if suser["username"] == request.form["username"]:
+        #        user = suser
         try:
             if(user["password"] == request.form["password"]):
                 return user["AccessToken"]
