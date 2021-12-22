@@ -21,6 +21,9 @@ def hello_world():
 def login():
     global ecostreet_core_service
     global configuration_core_service
+    global service_ip
+    global service_name
+    global users
     try:
         user = None
         for suser in users:
@@ -40,6 +43,10 @@ def login():
 def update_ip():
     global ecostreet_core_service
     global configuration_core_service
+    global service_ip
+    global service_name
+    global users
+    
     data = {"name": service_name, "ip": service_ip}
     url = 'http://' + configuration_core_service + '/update'
     response = requests.post(url, data=data)
@@ -49,6 +56,10 @@ def update_ip():
 def config_update():
     global ecostreet_core_service
     global configuration_core_service
+    global service_ip
+    global service_name
+    global users
+    
     try:
         microservice = request.form["name"]
         ms_ip = request.form["ip"]
@@ -64,5 +75,9 @@ def config_update():
 def get_config():
     global ecostreet_core_service
     global configuration_core_service
+    global service_ip
+    global service_name
+    global users
+    
     return str([ecostreet_core_service, configuration_core_service])
 
