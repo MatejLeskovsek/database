@@ -5,6 +5,12 @@ import requests
 
 app = Flask(__name__)
 
+service_name = "database_core_service"
+service_ip = "34.159.211.186:5000"
+
+ecostreet_core_service = "34.120.106.247"
+configuration_core_service = "192.168.1.121"
+
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
 
 @app.route("/")
@@ -29,7 +35,26 @@ def login():
     except Exception as err:
         return err
     
-@app.route('/config', methods = ['POST'])
-def config():
-    return 200
+@app.route("/update_ip")
+def update_ip():
+    data = {"name": service_name, "ip": service_ip}
+    url = 'http://' + configuration_core_service + '/update'
+    response = requests.post(url, data=data)
+    return response.text
+
+@app.route("/config", methods = ['POST'])
+def config_update():
+    try:
+        microservice = request.form["name"]
+        ms_ip = request.form["ip"]
+        if microservice == "database_core_service":
+            ecostreet_core_service = ms_ip
+        if microservice == "configuration_core_service":
+            configuration_core_service = ms_ip
+    except Exception as err:
+        return err
+
+@app.route("/getconfig")
+def get_config():
+    return [ecostreet_core_service, configuration_core_service]
 
