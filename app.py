@@ -39,13 +39,15 @@ def login():
     except Exception as err:
         return err
     
-@app.route("/update_ip")
+@app.route("/update_ip", methods = ['POST'])
 def update_ip():
     global ecostreet_core_service
     global configuration_core_service
     global service_ip
     global service_name
     global users
+    
+    service_ip = request.form["ip"]
     
     data = {"name": service_name, "ip": service_ip}
     url = 'http://' + configuration_core_service + '/update'
