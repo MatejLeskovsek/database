@@ -8,8 +8,8 @@ app = Flask(__name__)
 service_name = "database_core_service"
 service_ip = "34.159.211.186:5000"
 
-ecostreet_core_service = "34.120.106.247"
-configuration_core_service = "192.168.1.121"
+ecostreet_core_service = "34.159.194.58:5000"
+configuration_core_service = "34.141.19.56:5000"
 
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
 
