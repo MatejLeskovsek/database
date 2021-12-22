@@ -47,6 +47,7 @@ def authenticate_request():
     global users
     for suser in users:
         if suser["AccessToken"] == request.form["AccessToken"]:
+            # additional functionalities could be implemented
             return "200 OK"
     return "401 UNAUTHORIZED"
 
