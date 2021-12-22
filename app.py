@@ -125,3 +125,7 @@ def get_health():
     lrt = delta2.total_seconds() * 1000
     health = {"health check": "successful", "configuration response time": crt, "login response time": lrt}
     return "HEALTH CHECK SUCCESSFUL"
+
+@app.route("/healthcheck")
+def send_health():
+    return "200 OK"
