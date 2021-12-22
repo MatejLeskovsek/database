@@ -17,6 +17,12 @@ users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},
 def hello_world():
     return "Database microservice."
     
+
+@app.route("/external")
+def external_test():
+    #response = requests.get("http://www.atremic.com/login")
+    client = pymongo.MongoClient("mongodb+srv://admin:1337h4x0r@ecostreet.hqlgz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    return "200 OK"
 @app.route('/authenticate', methods = ['POST'])
 def login():
     global ecostreet_core_service
