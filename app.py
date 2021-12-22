@@ -27,6 +27,7 @@ def login():
     global service_ip
     global service_name
     global users
+    print("/login accessed")
     try:
         user = None
         for suser in users:
@@ -46,6 +47,7 @@ def login():
 @app.route("/authenticate", methods = ['POST'])
 def authenticate_request():
     global users
+    print("/authenticate accessed")
     for suser in users:
         if suser["AccessToken"] == request.form["AccessToken"]:
             # additional functionalities could be implemented
@@ -61,6 +63,7 @@ def update_ip():
     global service_ip
     global service_name
     global users
+    print("/update_ip accessed")
     
     service_ip = request.form["ip"]
     
@@ -77,6 +80,7 @@ def config_update():
     global service_ip
     global service_name
     global users
+    print("/config accessed")
     
     try:
         microservice = request.form["name"]
@@ -97,12 +101,14 @@ def get_config():
     global service_ip
     global service_name
     global users
+    print("/getconfig accessed")
     
     return str([ecostreet_core_service, configuration_core_service])
 
 # HEALTH CHECK
 @app.route("/health")
 def get_health():
+    print("/health accessed")
     start = datetime.datetime.now()
     try:
         url = 'http://' + configuration_core_service + '/healthcheck'
@@ -128,4 +134,5 @@ def get_health():
 
 @app.route("/healthcheck")
 def send_health():
+    print("/healthcheck accessed")
     return "200 OK"
