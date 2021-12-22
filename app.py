@@ -19,7 +19,8 @@ def hello_world():
     
 @app.route('/authenticate', methods = ['POST'])
 def login():
-    # connect to mongodb and authenticate user, return token
+    global ecostreet_core_service
+    global configuration_core_service
     try:
         user = None
         for suser in users:
@@ -37,6 +38,8 @@ def login():
     
 @app.route("/update_ip")
 def update_ip():
+    global ecostreet_core_service
+    global configuration_core_service
     data = {"name": service_name, "ip": service_ip}
     url = 'http://' + configuration_core_service + '/update'
     response = requests.post(url, data=data)
@@ -44,6 +47,8 @@ def update_ip():
 
 @app.route("/config", methods = ['POST'])
 def config_update():
+    global ecostreet_core_service
+    global configuration_core_service
     try:
         microservice = request.form["name"]
         ms_ip = request.form["ip"]
@@ -57,5 +62,7 @@ def config_update():
 
 @app.route("/getconfig")
 def get_config():
+    global ecostreet_core_service
+    global configuration_core_service
     return str([ecostreet_core_service, configuration_core_service])
 
