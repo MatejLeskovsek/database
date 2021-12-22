@@ -17,7 +17,7 @@ def hello_world():
 def login():
     # connect to mongodb and authenticate user, return token
     try:
-        #client = pymongo.MongoClient("mongo")
+        #client = pymongo.MongoClient("mongo") 
         #db = client.ecostreetdb
         #user = db.users.find_one({
         #    "username": request.form["username"]
