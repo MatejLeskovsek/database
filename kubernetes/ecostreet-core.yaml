@@ -220,7 +220,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    test: database-core
+    test: liveness
   name: readiness-exec-db
 spec:
   containers:
@@ -242,7 +242,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    test: database-core
+    test: liveness
   name: liveness-exec-db
 spec:
   containers:
