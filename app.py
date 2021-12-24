@@ -45,6 +45,7 @@ docs.register(hello_world)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 @marshal_with(NoneSchema, description='USER NOT FOUND', code=404)
+@marshal_with(NoneSchema, description='INTERNAL SERVER ERROR', code=500)
 def login():
     global ecostreet_core_service
     global configuration_core_service
@@ -65,7 +66,7 @@ def login():
         except:
             return "Error 404: User Not Found.", 404
     except Exception as err:
-        return err, 404
+        return err, 500
 docs.register(login)
 
 # COMMAND AUTHENTICATION FUNCTION
@@ -103,7 +104,7 @@ def update_ip():
     try:
         url = 'http://' + configuration_core_service + '/cfupdate'
         response = requests.post(url, data=data)
-        return response.text
+        return response.text, 200
     except:
         return "Something went wrong.", 500
 docs.register(update_ip)
@@ -128,7 +129,7 @@ def config_update():
             ecostreet_core_service = ms_ip
         if microservice == "configuration_core_service":
             configuration_core_service = ms_ip
-        return "200 OK"
+        return "200 OK", 200
     except Exception as err:
         return "Something went wrong.", 500
 docs.register(config_update)
@@ -174,7 +175,7 @@ def get_health():
     delta2 = end2-start2
     lrt = delta2.total_seconds() * 1000
     health = {"metric check": "successful", "configuration response time": crt, "login response time": lrt}
-    return str(health)
+    return str(health), 200
 docs.register(get_health)
 
 # HEALTH CHECK
@@ -182,5 +183,5 @@ docs.register(get_health)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 def send_health():
     print("/dbhealthcheck accessed")
-    return "200 OK"
+    return "200 OK", 200
 docs.register(send_health)
