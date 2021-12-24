@@ -29,14 +29,14 @@ class NoneSchema(Schema):
 @app.route("/")
 @marshal_with(NoneSchema, description='200 OK', code=200)
 def health():
-    return "200"
+    return "200", 200
 docs.register(health)
 
 # HOME PAGE
 @app.route("/db")
 @marshal_with(NoneSchema, description='200 OK', code=200)
 def hello_world():
-    return "Database microservice."
+    return "Database microservice.", 200
 docs.register(hello_world)
 
 # USER AUTHENTICATION - DATABASE MOCKUP
@@ -59,13 +59,13 @@ def login():
                 user = suser
         try:
             if(user["password"] == request.form["password"]):
-                return user["AccessToken"]
+                return user["AccessToken"], 200
             else:
                 return "Error 401: Unauthorized. Login  Incorrect.", 401
         except:
             return "Error 404: User Not Found.", 404
     except Exception as err:
-        return err
+        return err, 404
 docs.register(login)
 
 # COMMAND AUTHENTICATION FUNCTION
