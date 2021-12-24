@@ -17,7 +17,7 @@ users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},
 # HEALTH PAGE
 @app.route("/")
 def health():
-    return 200
+    return "200"
 
 # HOME PAGE
 @app.route("/db")
