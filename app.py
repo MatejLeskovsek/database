@@ -7,6 +7,7 @@ from webargs import fields
 from flask_apispec import use_kwargs, marshal_with
 from flask_apispec import FlaskApiSpec
 from marshmallow import Schema
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.config.update({
@@ -15,6 +16,7 @@ app.config.update({
 })
 docs = FlaskApiSpec(app, document_options=False)
 
+cors = CORS(app)
 service_name = "database_core_service"
 service_ip = "34.96.72.77"
 
