@@ -23,25 +23,25 @@ configuration_core_service = "34.96.72.77"
 
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
 class NoneSchema(Schema):
-        pass
+    response = fields.Str()
 
 # HEALTH PAGE
 @app.route("/")
 @marshal_with(NoneSchema, description='200 OK', code=200)
 def health():
-    return "200", 200
+    return {"response": "200"}, 200
 docs.register(health)
 
 # HOME PAGE
 @app.route("/db")
 @marshal_with(NoneSchema, description='200 OK', code=200)
 def hello_world():
-    return "Database microservice.", 200
+    return {"response": "Database microservice."}, 200
 docs.register(hello_world)
 
 # USER AUTHENTICATION - DATABASE MOCKUP
 @app.route('/dblogin', methods = ['POST'])
-@use_kwargs({'username': fields.Str(), 'password': fields.Str()})
+@use_kwargs({"username": fields.Str(), "password": fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 @marshal_with(NoneSchema, description='USER NOT FOUND', code=404)
@@ -60,13 +60,13 @@ def login():
                 user = suser
         try:
             if(user["password"] == request.form["password"]):
-                return user["AccessToken"], 200
+                return {"response": user["AccessToken"]}, 200
             else:
-                return "Error 401: Unauthorized. Login  Incorrect.", 401
+                return {"response": "Error 401: Unauthorized. Login  Incorrect."}, 401
         except:
-            return "Error 404: User Not Found.", 404
+            return {"response": "Error 404: User Not Found."}, 404
     except Exception as err:
-        return err, 500
+        return {"response": str(err)}, 500
 docs.register(login)
 
 # COMMAND AUTHENTICATION FUNCTION
@@ -80,8 +80,8 @@ def authenticate_request():
     for suser in users:
         if suser["AccessToken"] == request.form["AccessToken"]:
             # additional functionalities could be implemented
-            return "200 OK"
-    return "UNAUTHORIZED", 401
+            return {"response": "200 OK"}, 200
+    return {"response": "UNAUTHORIZED"}, 401
 docs.register(authenticate_request)
 
  
@@ -104,9 +104,9 @@ def update_ip():
     try:
         url = 'http://' + configuration_core_service + '/cfupdate'
         response = requests.post(url, data=data)
-        return response.text, 200
+        return {"response": response.text}, 200
     except:
-        return "Something went wrong.", 500
+        return {"response": "Something went wrong."}, 500
 docs.register(update_ip)
 
 # FUNCTION TO UPDATE IP'S OF OTHER SERVICES
@@ -129,9 +129,9 @@ def config_update():
             ecostreet_core_service = ms_ip
         if microservice == "configuration_core_service":
             configuration_core_service = ms_ip
-        return "200 OK", 200
+        return {"response": "200 OK"}, 200
     except Exception as err:
-        return "Something went wrong.", 500
+        return {"response": "Something went wrong."}, 500
 docs.register(config_update)
 
 # FUNCTION TO GET CURRENT CONFIG
@@ -145,7 +145,7 @@ def get_config():
     global users
     print("/dbgetconfig accessed")
     
-    return str([ecostreet_core_service, configuration_core_service])
+    return {"response": str([ecostreet_core_service, configuration_core_service])}, 200
 docs.register(get_config)
 
 # METRICS FUNCTION
@@ -159,7 +159,7 @@ def get_health():
         url = 'http://' + configuration_core_service + '/cfhealthcheck'
         response = requests.get(url)
     except Exception as err:
-        return "METRIC CHECK FAIL: configuration unavailable", 500
+        return {"response": "METRIC CHECK FAIL: configuration unavailable"}, 500
     end = datetime.datetime.now()
     
     start2 = datetime.datetime.now()
@@ -167,7 +167,7 @@ def get_health():
         url = 'http://' + ecostreet_core_service + '/lghealthcheck'
         response = requests.get(url)
     except Exception as err:
-        return "METRIC CHECK FAIL: login service unavailable", 500
+        return {"response": "METRIC CHECK FAIL: login service unavailable"}, 500
     end2 = datetime.datetime.now()
     
     delta1 = end-start
@@ -175,7 +175,7 @@ def get_health():
     delta2 = end2-start2
     lrt = delta2.total_seconds() * 1000
     health = {"metric check": "successful", "configuration response time": crt, "login response time": lrt}
-    return str(health), 200
+    return {"response": str(health)}, 200
 docs.register(get_health)
 
 # HEALTH CHECK
@@ -183,5 +183,5 @@ docs.register(get_health)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 def send_health():
     print("/dbhealthcheck accessed")
-    return "200 OK", 200
+    return {"response": "200 OK"}, 200
 docs.register(send_health)
