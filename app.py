@@ -15,19 +15,19 @@ configuration_core_service = "34.141.19.56:5000"
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
 
 # HOME PAGE
-@app.route("/")
+@app.route("/db")
 def hello_world():
     return "Database microservice."
 
 # USER AUTHENTICATION - DATABASE MOCKUP
-@app.route('/login', methods = ['POST'])
+@app.route('/dblogin', methods = ['POST'])
 def login():
     global ecostreet_core_service
     global configuration_core_service
     global service_ip
     global service_name
     global users
-    print("/login accessed")
+    print("/dblogin accessed")
     try:
         user = None
         for suser in users:
@@ -44,10 +44,10 @@ def login():
         return err
 
 # COMMAND AUTHENTICATION FUNCTION
-@app.route("/authenticate", methods = ['POST'])
+@app.route("/dbauthenticate", methods = ['POST'])
 def authenticate_request():
     global users
-    print("/authenticate accessed")
+    print("/dbauthenticate accessed")
     for suser in users:
         if suser["AccessToken"] == request.form["AccessToken"]:
             # additional functionalities could be implemented
@@ -56,31 +56,31 @@ def authenticate_request():
 
  
 # SERVICE IP UPDATE FUNCTION
-@app.route("/update_ip", methods = ['POST'])
+@app.route("/dbupdate_ip", methods = ['POST'])
 def update_ip():
     global ecostreet_core_service
     global configuration_core_service
     global service_ip
     global service_name
     global users
-    print("/update_ip accessed")
+    print("/dbupdate_ip accessed")
     
     service_ip = request.form["ip"]
     
     data = {"name": service_name, "ip": service_ip}
-    url = 'http://' + configuration_core_service + '/update'
+    url = 'http://' + configuration_core_service + '/cfupdate'
     response = requests.post(url, data=data)
     return response.text
 
 # FUNCTION TO UPDATE IP'S OF OTHER SERVICES
-@app.route("/config", methods = ['POST'])
+@app.route("/dbconfig", methods = ['POST'])
 def config_update():
     global ecostreet_core_service
     global configuration_core_service
     global service_ip
     global service_name
     global users
-    print("/config accessed")
+    print("/dbconfig accessed")
     
     try:
         microservice = request.form["name"]
@@ -94,24 +94,24 @@ def config_update():
         return err
 
 # FUNCTION TO GET CURRENT CONFIG
-@app.route("/getconfig")
+@app.route("/dbgetconfig")
 def get_config():
     global ecostreet_core_service
     global configuration_core_service
     global service_ip
     global service_name
     global users
-    print("/getconfig accessed")
+    print("/dbgetconfig accessed")
     
     return str([ecostreet_core_service, configuration_core_service])
 
 # METRICS FUNCTION
-@app.route("/metrics")
+@app.route("/dbmetrics")
 def get_health():
-    print("/metrics accessed")
+    print("/dbmetrics accessed")
     start = datetime.datetime.now()
     try:
-        url = 'http://' + configuration_core_service + '/healthcheck'
+        url = 'http://' + configuration_core_service + '/cfhealthcheck'
         response = requests.get(url)
     except Exception as err:
         return "METRIC CHECK FAIL: configuration unavailable"
@@ -119,7 +119,7 @@ def get_health():
     
     start2 = datetime.datetime.now()
     try:
-        url = 'http://' + ecostreet_core_service + '/healthcheck'
+        url = 'http://' + ecostreet_core_service + '/lghealthcheck'
         response = requests.get(url)
     except Exception as err:
         return "METRIC CHECK FAIL: login service unavailable"
@@ -133,7 +133,7 @@ def get_health():
     return str(health)
 
 # HEALTH CHECK
-@app.route("/healthcheck")
+@app.route("/dbhealthcheck")
 def send_health():
-    print("/healthcheck accessed")
+    print("/dbhealthcheck accessed")
     return "200 OK"
