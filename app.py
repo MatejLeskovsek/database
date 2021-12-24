@@ -14,6 +14,11 @@ configuration_core_service = "34.141.19.56:5000"
 
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
 
+# HEALTH PAGE
+@app.route("/")
+def health():
+    return 200
+
 # HOME PAGE
 @app.route("/db")
 def hello_world():
