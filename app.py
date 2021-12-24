@@ -83,7 +83,7 @@ def authenticate_request():
         if suser["AccessToken"] == request.form["AccessToken"]:
             # additional functionalities could be implemented
             return {"response": "200 OK"}, 200
-    return {"response": request.form["AccessToken"]}, 401
+    return {"response": "UNAUTHORIZED"}, 401
 docs.register(authenticate_request)
 
  
