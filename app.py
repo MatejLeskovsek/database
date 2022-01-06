@@ -23,7 +23,10 @@ service_ip = "34.96.72.77"
 ecostreet_core_service = "34.96.72.77"
 configuration_core_service = "34.96.72.77"
 
+
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
+
+
 class NoneSchema(Schema):
     response = fields.Str()
 
@@ -185,5 +188,12 @@ docs.register(get_health)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 def send_health():
     print("/dbhealthcheck accessed")
+    try:
+        url = 'http://' + ecostreet_core_service + '/lghealthcheck'
+        response = requests.get(url)
+        url = 'http://' + configuration_core_service + '/cfhealthcheck'
+        response = requests.get(url)
+    except Exception as err:
+        return {"response": "Healthcheck fail: depending services unavailable"}, 500
     return {"response": "200 OK"}, 200
 docs.register(send_health)
