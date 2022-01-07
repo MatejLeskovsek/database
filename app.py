@@ -96,7 +96,8 @@ docs.register(authenticate_request)
 
 
 # GET GAMES
-@app.route("/dbgetgames")
+@app.route("/dbgetgames", methods=["POST"])
+@use_kwargs({'AccessToken':fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='Something went wrong', code=500)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
