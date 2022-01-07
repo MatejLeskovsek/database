@@ -185,3 +185,21 @@ spec:
     app: database-core
   sessionAffinity: None
   type: NodePort
+---
+apiVersion: v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /db
+        pathType: Prefix
+        backend:
+          service:
+            name: database-core-service
+            port:
+              number: 80
