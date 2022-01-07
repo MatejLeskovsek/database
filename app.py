@@ -26,6 +26,7 @@ configuration_core_service = "35.190.119.123"
 
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
 
+games = [{"name":"1337", "date":"14.1.2022"}]
 
 class NoneSchema(Schema):
     response = fields.Str()
@@ -92,6 +93,41 @@ def authenticate_request():
             return {"response": "200 OK"}, 200
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(authenticate_request)
+
+# ADD GAME
+@app.route("/dbaddgame", methods=["POST"])
+@use_kwargs({'name': fields.Str(), 'date': fields.Str(), 'AccessToken':fields.Str()})
+@marshal_with(NoneSchema, description='200 OK', code=200)
+@marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
+@marshal_with(NoneSchema, description='Game already exists', code=402)
+def add_game():
+    for suser in users:
+        if suser["AccessToken"] == request.form["AccessToken"]:
+            for game in games:
+                if game["name"] == request.form["name"]:
+                    return {"response": "Game already exists"}, 402
+            games.append({"name":request.form["name"], "date":request.form["date"]})
+            print(games)
+            return {"response": "200 OK"}, 200
+    return {"response": "UNAUTHORIZED"}, 401
+docs.register(hello_world)
+
+# REMOVE GAME
+@app.route("/dbremovegame", methods=["POST"])
+@use_kwargs({'name': fields.Str(), 'AccessToken':fields.Str()})
+@marshal_with(NoneSchema, description='200 OK', code=200)
+@marshal_with(NoneSchema, description='Something went wrong', code=500)
+def remove_game():
+    for suser in users:
+        if suser["AccessToken"] == request.form["AccessToken"]:
+            for i in range(len(games)):
+                game = games[i]
+                if game["name"] == request.form["name"]:
+                    games.pop(i)
+                    print(games)
+            return {"response": "200 OK"}, 200
+    return {"response": "UNAUTHORIZED"}, 401
+docs.register(hello_world)
 
  
 # SERVICE IP UPDATE FUNCTION
