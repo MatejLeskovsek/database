@@ -171,78 +171,13 @@ kind: Service
 metadata:
   annotations:
     cloud.google.com/neg: '{"ingress":true}'
-  finalizers:
-    - service.kubernetes.io/load-balancer-cleanup
-  labels:
-    app: database-core
-  managedFields:
-    - apiVersion: v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:labels':
-            .: {}
-            'f:app': {}
-        'f:spec':
-          'f:externalTrafficPolicy': {}
-          'f:ports':
-            .: {}
-            'k:{"port":5000,"protocol":"TCP"}':
-              .: {}
-              'f:port': {}
-              'f:protocol': {}
-              'f:targetPort': {}
-          'f:selector':
-            .: {}
-            'f:app': {}
-          'f:sessionAffinity': {}
-          'f:type': {}
-      manager: GoogleCloudConsole
-      operation: Update
-      time: '2021-11-14T14:59:33Z'
-    - apiVersion: v1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:finalizers':
-            .: {}
-            'v:"service.kubernetes.io/load-balancer-cleanup"': {}
-        'f:status':
-          'f:loadBalancer':
-            'f:ingress': {}
-      manager: kube-controller-manager
-      operation: Update
-      time: '2021-11-14T15:00:22Z'
-  name: database-core-service
-  namespace: ecostreet
-spec:
-  clusterIP: 10.29.0.20
-  clusterIPs:
-    - 10.29.0.20
-  externalTrafficPolicy: Cluster
-  ports:
-    - nodePort: 32675
-      port: 5000
-      protocol: TCP
-      targetPort: 5000
-  selector:
-    app: database-core
-  sessionAffinity: None
-  type: LoadBalancer
----
-apiVersion: v1
-kind: Service
-metadata:
-  annotations:
-    cloud.google.com/neg: '{"ingress":true}'
   creationTimestamp: "2022-01-07T10:28:29Z"
-  generateName: database-core-
   labels:
     app: database-core
     app.kubernetes.io/managed-by: gcp-cloud-build-deploy
     app.kubernetes.io/name: ecostreet-core
     app.kubernetes.io/version: 5dbe604a7c7955557751e45c6edb96c455176afb
-  name: database-core-ndhqt
+  name: database-core-service
   namespace: ecostreet
   resourceVersion: "43186"
   uid: 5356af00-217d-4364-bd33-2e412dcd3c7d
