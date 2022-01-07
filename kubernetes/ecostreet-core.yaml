@@ -186,7 +186,7 @@ spec:
   sessionAffinity: None
   type: NodePort
 ---
-apiVersion: v1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: minimal-ingress
