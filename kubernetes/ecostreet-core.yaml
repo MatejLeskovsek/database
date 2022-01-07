@@ -176,6 +176,7 @@ metadata:
   name: database-core-service
   namespace: ecostreet
 spec:
+  externalTrafficPolicy: Cluster
   ports:
     - nodePort: 32674
       port: 5000
