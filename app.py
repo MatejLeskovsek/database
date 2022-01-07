@@ -44,7 +44,7 @@ def hello_world():
     return {"response": "Database microservice."}, 200
 docs.register(hello_world)
 
-# USER AUTHENTICATION - DATABASE MOCKUP  
+# USER AUTHENTICATION - DATABASE MOCKUP
 @app.route('/dblogin', methods = ['POST'])
 @use_kwargs({"username": fields.Str(), "password": fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
