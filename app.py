@@ -18,10 +18,10 @@ docs = FlaskApiSpec(app, document_options=False)
 
 cors = CORS(app)
 service_name = "database_core_service"
-service_ip = "34.96.72.77"
+service_ip = "35.190.119.123"
 
-ecostreet_core_service = "34.96.72.77"
-configuration_core_service = "34.96.72.77"
+ecostreet_core_service = "35.190.119.123"
+configuration_core_service = "35.190.119.123"
 
 
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
