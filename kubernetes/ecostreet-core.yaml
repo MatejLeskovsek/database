@@ -171,7 +171,6 @@ kind: Service
 metadata:
   annotations:
     cloud.google.com/neg: '{"ingress":true}'
-  resourceVersion: "58552"
   labels:
     app: database-core
   name: database-core-service
