@@ -264,56 +264,56 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: login-core-service
+            name: ecostreet-core-service
             port:
               number: 80
       - path: /lglogin
         pathType: Prefix
         backend:
           service:
-            name: login-core-service
+            name: ecostreet-core-service
             port:
               number: 80
       - path: /lgcommand
         pathType: Prefix
         backend:
           service:
-            name: login-core-service
+            name: ecostreet-core-service
             port:
               number: 80
       - path: /lgupdate_ip
         pathType: Prefix
         backend:
           service:
-            name: login-core-service
+            name: ecostreet-core-service
             port:
               number: 80
       - path: /lgconfig
         pathType: Prefix
         backend:
           service:
-            name: login-core-service
+            name: ecostreet-core-service
             port:
               number: 80
       - path: /lggetconfig
         pathType: Prefix
         backend:
           service:
-            name: login-core-service
+            name: ecostreet-core-service
             port:
               number: 80
       - path: /lgmetrics
         pathType: Prefix
         backend:
           service:
-            name: login-core-service
+            name: ecostreet-core-service
             port:
               number: 80
       - path: /lghealthcheck
         pathType: Prefix
         backend:
           service:
-            name: login-core-service
+            name: ecostreet-core-service
             port:
               number: 80
       - path: /cf
