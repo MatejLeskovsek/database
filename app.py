@@ -58,6 +58,10 @@ def login():
     global service_name
     global users
     print("/dblogin accessed")
+    
+    # klic za mongodb
+    #client = pymongo.MongoClient("mongodb+srv://admin:admin@ecostreet.hqlgz.mongodb.net/EcoStreet?retryWrites=true&w=majority")
+    #db = client.ecostreetdb
     try:
         user = None
         for suser in users:

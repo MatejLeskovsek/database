@@ -97,7 +97,7 @@ spec:
         app: database-core
     spec:
       containers:
-        - image: gcr.io/quiet-era-332013/github.com/matejleskovsek/database
+        - image: gcr.io/synthetic-diode-337508/github.com/matejleskovsek/database
           imagePullPolicy: IfNotPresent
           name: database-sha256-1
           readinessProbe:
