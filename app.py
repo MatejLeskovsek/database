@@ -94,6 +94,15 @@ def authenticate_request():
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(authenticate_request)
 
+
+# GET GAMES
+@app.route("/dbgetgames")
+@marshal_with(NoneSchema, description='200 OK', code=200)
+@marshal_with(NoneSchema, description='Something went wrong', code=500)
+def get_games():
+    return {"response": games}, 200
+docs.register(get_games)
+
 # ADD GAME
 @app.route("/dbaddgame", methods=["POST"])
 @use_kwargs({'name': fields.Str(), 'date': fields.Str(), 'AccessToken':fields.Str()})
@@ -110,7 +119,7 @@ def add_game():
             print(games)
             return {"response": "200 OK"}, 200
     return {"response": "UNAUTHORIZED"}, 401
-docs.register(hello_world)
+docs.register(add_game)
 
 # REMOVE GAME
 @app.route("/dbremovegame", methods=["POST"])
@@ -127,7 +136,7 @@ def remove_game():
                     print(games)
             return {"response": "200 OK"}, 200
     return {"response": "UNAUTHORIZED"}, 401
-docs.register(hello_world)
+docs.register(remove_game)
 
  
 # SERVICE IP UPDATE FUNCTION
