@@ -193,9 +193,9 @@ docs.register(get_health)
 def send_health():
     print("/dbhealthcheck accessed")
     try:
-        url = 'http://' + ecostreet_core_service + '/lghealthcheck'
+        url = 'http://' + ecostreet_core_service + '/lg'
         response = requests.get(url)
-        url = 'http://' + configuration_core_service + '/cfhealthcheck'
+        url = 'http://' + configuration_core_service + '/cf'
         response = requests.get(url)
     except Exception as err:
         return {"response": "Healthcheck fail: depending services unavailable"}, 500
