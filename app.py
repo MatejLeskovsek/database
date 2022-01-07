@@ -99,8 +99,12 @@ docs.register(authenticate_request)
 @app.route("/dbgetgames")
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='Something went wrong', code=500)
+@marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 def get_games():
-    return {"response": games}, 200
+    for suser in users:
+        if suser["AccessToken"] == request.form["AccessToken"]:
+            return {"response": games}, 200
+    return {"response": "UNAUTHORIZED"}, 401
 docs.register(get_games)
 
 # ADD GAME
