@@ -218,6 +218,7 @@ def config_update():
     try:
         microservice = str(request.form["name"])
         ms_ip = str(request.form["ip"])
+        logger.info([microservice, ms_ip])
         if microservice == "ecostreet_core_service":
             ecostreet_core_service = ms_ip
         if microservice == "configuration_core_service":
