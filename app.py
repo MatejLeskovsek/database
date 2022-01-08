@@ -42,7 +42,7 @@ class ContextFilter(logging.Filter):
 
 syslog = SysLogHandler(address=('logs3.papertrailapp.com', 17630))
 syslog.addFilter(ContextFilter())
-format = '%(asctime)s %(hostname)s Time: %(message)s'
+format = '%(asctime)s %(hostname)s TimeProject: %(message)s'
 formatter = logging.Formatter(format, datefmt='%b %d %H:%M:%S')
 syslog.setFormatter(formatter)
 logger = logging.getLogger()
