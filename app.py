@@ -33,6 +33,12 @@ games = [{"name":"1337", "date":"14.1.2022"}]
 class NoneSchema(Schema):
     response = fields.Str()
 
+# FALLBACK
+@app.errorhandler(404)
+def not_found(e):
+    return "The API call destination was not found.", 404
+
+
 # HEALTH PAGE
 @app.route("/")
 @marshal_with(NoneSchema, description='200 OK', code=200)
