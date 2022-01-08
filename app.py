@@ -8,6 +8,8 @@ from flask_apispec import use_kwargs, marshal_with
 from flask_apispec import FlaskApiSpec
 from marshmallow import Schema
 from flask_cors import CORS, cross_origin
+import psutil
+import sys
 
 app = Flask(__name__)
 app.config.update({
@@ -58,7 +60,7 @@ def login():
     global service_ip
     global service_name
     global users
-    print("/dblogin accessed")
+    sys.stdout.write("/dblogin accessed\n")
     
     # klic za mongodb
     #client = pymongo.MongoClient("mongodb+srv://admin:admin@ecostreet.hqlgz.mongodb.net/EcoStreet?retryWrites=true&w=majority")
@@ -86,7 +88,7 @@ docs.register(login)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 def authenticate_request():
     global users
-    print("/dbauthenticate accessed")
+    sys.stdout.write("/dbauthenticate accessed\n")
     for suser in users:
         if suser["AccessToken"] == request.form["AccessToken"]:
             # additional functionalities could be implemented
@@ -102,6 +104,7 @@ docs.register(authenticate_request)
 @marshal_with(NoneSchema, description='Something went wrong', code=500)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 def get_games():
+    sys.stdout.write("/dbgetgames accessed\n")
     for suser in users:
         if suser["AccessToken"] == request.form["AccessToken"]:
             return {"response": games}, 200
@@ -115,13 +118,14 @@ docs.register(get_games)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 @marshal_with(NoneSchema, description='Game already exists', code=402)
 def add_game():
+    sys.stdout.write("/dbaddgame accessed\n")
     for suser in users:
         if suser["AccessToken"] == request.form["AccessToken"]:
             for game in games:
                 if game["name"] == request.form["name"]:
                     return {"response": "Game already exists"}, 402
             games.append({"name":request.form["name"], "date":request.form["date"]})
-            print(games)
+            sys.stdout.write(games)
             return {"response": "200 OK"}, 200
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(add_game)
@@ -132,13 +136,14 @@ docs.register(add_game)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='Something went wrong', code=500)
 def remove_game():
+    sys.stdout.write("/dbremovegame accessed\n")
     for suser in users:
         if suser["AccessToken"] == request.form["AccessToken"]:
             for i in range(len(games)):
                 game = games[i]
                 if game["name"] == request.form["name"]:
                     games.pop(i)
-                    print(games)
+                    sys.stdout.write(games)
             return {"response": "200 OK"}, 200
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(remove_game)
@@ -155,7 +160,7 @@ def update_ip():
     global service_ip
     global service_name
     global users
-    print("/dbupdate_ip accessed")
+    sys.stdout.write("/dbupdate_ip accessed\n")
     
     service_ip = request.form["ip"]
     
@@ -179,7 +184,7 @@ def config_update():
     global service_ip
     global service_name
     global users
-    print("/dbconfig accessed")
+    sys.stdout.write("/dbconfig accessed\n")
     
     try:
         microservice = request.form["name"]
@@ -202,7 +207,7 @@ def get_config():
     global service_ip
     global service_name
     global users
-    print("/dbgetconfig accessed")
+    sys.stdout.write("/dbgetconfig accessed\n")
     
     return {"response": str([ecostreet_core_service, configuration_core_service])}, 200
 docs.register(get_config)
@@ -212,7 +217,7 @@ docs.register(get_config)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='METRIC CHECK FAIL', code=500)
 def get_health():
-    print("/dbmetrics accessed")
+    sys.stdout.write("/dbmetrics accessed\n")
     start = datetime.datetime.now()
     try:
         url = 'http://' + configuration_core_service + '/cfhealthcheck'
@@ -233,7 +238,9 @@ def get_health():
     crt = delta1.total_seconds() * 1000
     delta2 = end2-start2
     lrt = delta2.total_seconds() * 1000
-    health = {"metric check": "successful", "configuration response time": crt, "login response time": lrt}
+    cpu_load = psutil.cpu_percent(2)
+    ram_load = psutil.virtual_memory().percent
+    health = {"metric check": "successful", "configuration response time": crt, "login response time": lrt, "database CPU load": str(cpu_load) + "%", "database RAM load": str(ram_load) + "%"}
     return {"response": str(health)}, 200
 docs.register(get_health)
 
@@ -241,7 +248,7 @@ docs.register(get_health)
 @app.route("/dbhealthcheck")
 @marshal_with(NoneSchema, description='200 OK', code=200)
 def send_health():
-    print("/dbhealthcheck accessed")
+    sys.stdout.write("/dbhealthcheck accessed\n")
     try:
         url = 'http://' + ecostreet_core_service + '/lg'
         response = requests.get(url)
