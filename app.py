@@ -28,6 +28,8 @@ service_ip = "database-core-service"
 
 ecostreet_core_service = "ecostreet-core-service"
 configuration_core_service = "configuration-core-service"
+play_core_service = "play-core-service"
+admin_core_service = "admin-core-service"
 
 
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
@@ -206,6 +208,8 @@ docs.register(update_ip)
 def config_update():
     global ecostreet_core_service
     global configuration_core_service
+    global play_core_service
+    global admin_core_service
     global service_ip
     global service_name
     global users
@@ -214,10 +218,14 @@ def config_update():
     try:
         microservice = request.form["name"]
         ms_ip = request.form["ip"]
-        if microservice == "database_core_service":
+        if microservice == "ecostreet_core_service":
             ecostreet_core_service = ms_ip
         if microservice == "configuration_core_service":
             configuration_core_service = ms_ip
+        if microservice == "play_core_service":
+            play_core_service = ms_ip
+        if microservice == "admin_core_service":
+            admin_core_service = ms_ip
         return {"response": "200 OK"}, 200
     except Exception as err:
         return {"response": "Something went wrong."}, 500
