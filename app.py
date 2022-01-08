@@ -99,12 +99,16 @@ def login():
                 user = suser
         try:
             if(str(user["password"]) == str(request.form["password"])):
+                logger.info("Database microservice: /dblogin finished\n")
                 return {"response": user["AccessToken"]}, 200
             else:
+                logger.info("Database microservice: /dblogin unauthorized access\n")
                 return {"response": "Error 401: Unauthorized. Login  Incorrect."}, 401
         except:
+            logger.info("Database microservice: /dblogin invalid login\n")
             return {"response": "Error 404: User Not Found."}, 404
     except Exception as err:
+        logger.info("Database microservice: /dblogin hit an error\n")
         return {"response": str(err)}, 500
 docs.register(login)
 
@@ -119,7 +123,9 @@ def authenticate_request():
     for suser in users:
         if str(suser["AccessToken"]) == str(request.form["AccessToken"]):
             # additional functionalities could be implemented
+            logger.info("Database microservice: /dbauthenticate finished\n")
             return {"response": "200 OK"}, 200
+    logger.info("Database microservice: /dbauthenticate unauthorized access\n")
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(authenticate_request)
 
@@ -134,7 +140,9 @@ def get_games():
     logger.info("Database microservice: /dbgetgames accessed\n")
     for suser in users:
         if str(suser["AccessToken"]) == str(request.form["AccessToken"]):
+            logger.info("Database microservice: /dbgetgames finished\n")
             return {"response": games}, 200
+    logger.info("Database microservice: /dbgetgames unauthorized access\n")
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(get_games)
 
@@ -150,10 +158,13 @@ def add_game():
         if str(suser["AccessToken"]) == str(request.form["AccessToken"]):
             for game in games:
                 if str(game["name"]) == str(request.form["name"]):
+                    logger.info("Database microservice: /dbaddgame unable to create game\n")
                     return {"response": "Game already exists"}, 402
             games.append({"name":request.form["name"], "date":request.form["date"]})
             sys.stdout.write(games)
+            logger.info("Database microservice: /dbaddgame finished\n")
             return {"response": "200 OK"}, 200
+    logger.info("Database microservice: /dbaddgame unauthorized access\n")
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(add_game)
 
@@ -171,7 +182,9 @@ def remove_game():
                 if str(game["name"]) == str(request.form["name"]):
                     games.pop(i)
                     sys.stdout.write(games)
+            logger.info("Database microservice: /dbremovegame finished\n")
             return {"response": "200 OK"}, 200
+    logger.info("Database microservice: /dbremovegame unauthorized access\n")
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(remove_game)
 
@@ -195,9 +208,10 @@ def update_ip():
     try:
         url = 'http://' + configuration_core_service + '/cfupdate'
         response = requests.post(url, data=data)
-        logger.info(response.text)
+        logger.info("Database microservice: /dbupdate_ip finished\n")
         return {"response": response.text}, 200
     except:
+        logger.info("Database microservice: /dbupdate_ip hit an error\n")
         return {"response": "Something went wrong."}, 500
 docs.register(update_ip)
 
@@ -227,8 +241,10 @@ def config_update():
             play_core_service = ms_ip
         if microservice == "admin_core_service":
             admin_core_service = ms_ip
+        logger.info("Database microservice: /dbconfig finished\n")
         return {"response": "200 OK"}, 200
     except Exception as err:
+        logger.info("Database microservice: /dbconfig hit an error\n")
         return {"response": "Something went wrong."}, 500
 docs.register(config_update)
 
@@ -244,6 +260,7 @@ def get_config():
     global service_name
     global users
     logger.info("Database microservice: /dbgetconfig accessed\n")
+    logger.info("Database microservice: /dbgetconfig finished\n")
     
     return {"response": str([ecostreet_core_service, configuration_core_service, play_core_service, admin_core_service])}, 200
 docs.register(get_config)
@@ -259,6 +276,7 @@ def get_health():
         url = 'http://' + configuration_core_service + '/cfhealthcheck'
         response = requests.get(url)
     except Exception as err:
+        logger.info("Database microservice: /dbmetrics hit an error\n")
         return {"response": "METRIC CHECK FAIL: configuration unavailable"}, 500
     end = datetime.datetime.now()
     
@@ -267,6 +285,7 @@ def get_health():
         url = 'http://' + ecostreet_core_service + '/lghealthcheck'
         response = requests.get(url)
     except Exception as err:
+        logger.info("Database microservice: /dbmetrics hit an error\n")
         return {"response": "METRIC CHECK FAIL: login service unavailable"}, 500
     end2 = datetime.datetime.now()
     
@@ -277,6 +296,7 @@ def get_health():
     cpu_load = psutil.cpu_percent(2)
     ram_load = psutil.virtual_memory().percent
     health = {"metric check": "successful", "configuration response time": crt, "login response time": lrt, "database CPU load": str(cpu_load) + "%", "database RAM load": str(ram_load) + "%"}
+    logger.info("Database microservice: /dbmetrics finished\n")
     return {"response": str(health)}, 200
 docs.register(get_health)
 
@@ -291,6 +311,9 @@ def send_health():
         url = 'http://' + configuration_core_service + '/cf'
         response = requests.get(url)
     except Exception as err:
+        logger.info("Database microservice: /dbhealthcheck hit an error\n")
         return {"response": "Healthcheck fail: depending services unavailable"}, 500
+    
+    logger.info("Database microservice: /dbhealthcheck finished\n")
     return {"response": "200 OK"}, 200
 docs.register(send_health)
