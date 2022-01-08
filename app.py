@@ -95,10 +95,10 @@ def login():
     try:
         user = None
         for suser in users:
-            if suser["username"] == request.form["username"]:
+            if str(suser["username"]) == str(request.form["username"]):
                 user = suser
         try:
-            if(user["password"] == request.form["password"]):
+            if(str(user["password"]) == str(request.form["password"])):
                 return {"response": user["AccessToken"]}, 200
             else:
                 return {"response": "Error 401: Unauthorized. Login  Incorrect."}, 401
@@ -117,7 +117,7 @@ def authenticate_request():
     global users
     logger.info("Database microservice: /dbauthenticate accessed\n")
     for suser in users:
-        if suser["AccessToken"] == request.form["AccessToken"]:
+        if str(suser["AccessToken"]) == str(request.form["AccessToken"]):
             # additional functionalities could be implemented
             return {"response": "200 OK"}, 200
     return {"response": "UNAUTHORIZED"}, 401
@@ -133,7 +133,7 @@ docs.register(authenticate_request)
 def get_games():
     logger.info("Database microservice: /dbgetgames accessed\n")
     for suser in users:
-        if suser["AccessToken"] == request.form["AccessToken"]:
+        if str(suser["AccessToken"]) == str(request.form["AccessToken"]):
             return {"response": games}, 200
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(get_games)
@@ -147,9 +147,9 @@ docs.register(get_games)
 def add_game():
     logger.info("Database microservice: /dbaddgame accessed\n")
     for suser in users:
-        if suser["AccessToken"] == request.form["AccessToken"]:
+        if str(suser["AccessToken"]) == str(request.form["AccessToken"]):
             for game in games:
-                if game["name"] == request.form["name"]:
+                if str(game["name"]) == str(request.form["name"]):
                     return {"response": "Game already exists"}, 402
             games.append({"name":request.form["name"], "date":request.form["date"]})
             sys.stdout.write(games)
@@ -165,10 +165,10 @@ docs.register(add_game)
 def remove_game():
     logger.info("Database microservice: /dbremovegame accessed\n")
     for suser in users:
-        if suser["AccessToken"] == request.form["AccessToken"]:
+        if str(suser["AccessToken"]) == str(request.form["AccessToken"]):
             for i in range(len(games)):
                 game = games[i]
-                if game["name"] == request.form["name"]:
+                if str(game["name"]) == str(request.form["name"]):
                     games.pop(i)
                     sys.stdout.write(games)
             return {"response": "200 OK"}, 200
@@ -216,8 +216,8 @@ def config_update():
     logger.info("Database microservice: /dbconfig accessed\n")
     
     try:
-        microservice = request.form["name"]
-        ms_ip = request.form["ip"]
+        microservice = str(request.form["name"])
+        ms_ip = str(request.form["ip"])
         if microservice == "ecostreet_core_service":
             ecostreet_core_service = ms_ip
         if microservice == "configuration_core_service":
@@ -237,12 +237,14 @@ docs.register(config_update)
 def get_config():
     global ecostreet_core_service
     global configuration_core_service
+    global play_core_service
+    global admin_core_service
     global service_ip
     global service_name
     global users
     logger.info("Database microservice: /dbgetconfig accessed\n")
     
-    return {"response": str([ecostreet_core_service, configuration_core_service])}, 200
+    return {"response": str([ecostreet_core_service, configuration_core_service, play_core_service, admin_core_service])}, 200
 docs.register(get_config)
 
 # METRICS FUNCTION
