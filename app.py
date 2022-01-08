@@ -223,7 +223,7 @@ docs.register(get_config)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='METRIC CHECK FAIL', code=500)
 def get_health():
-    sys.stdout.write("Database microservice: /dbmetrics accessed\n")
+    sys.stdout.write({"event":"Database microservice: /dbmetrics accessed\n"})
     start = datetime.datetime.now()
     try:
         url = 'http://' + configuration_core_service + '/cfhealthcheck'
