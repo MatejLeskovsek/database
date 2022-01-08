@@ -40,6 +40,14 @@ class ContextFilter(logging.Filter):
         record.hostname = ContextFilter.hostname
         return True
 
+syslog = SysLogHandler(address=('logs3.papertrailapp.com', 17630))
+syslog.addFilter(ContextFilter())
+format = '%(asctime)s %(hostname)s Time: %(message)s'
+formatter = logging.Formatter(format, datefmt='%b %d %H:%M:%S')
+syslog.setFormatter(formatter)
+logger = logging.getLogger()
+logger.addHandler(syslog)
+logger.setLevel(logging.INFO)
 
 class NoneSchema(Schema):
     response = fields.Str()
@@ -77,7 +85,7 @@ def login():
     global service_ip
     global service_name
     global users
-    sys.stdout.write("Database microservice: /dblogin accessed\n")
+    logger.info("Database microservice: /dblogin accessed\n")
     
     # klic za mongodb
     #client = pymongo.MongoClient("mongodb+srv://admin:admin@ecostreet.hqlgz.mongodb.net/EcoStreet?retryWrites=true&w=majority")
@@ -105,7 +113,7 @@ docs.register(login)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 def authenticate_request():
     global users
-    sys.stdout.write("Database microservice: /dbauthenticate accessed\n")
+    logger.info("Database microservice: /dbauthenticate accessed\n")
     for suser in users:
         if suser["AccessToken"] == request.form["AccessToken"]:
             # additional functionalities could be implemented
@@ -121,7 +129,7 @@ docs.register(authenticate_request)
 @marshal_with(NoneSchema, description='Something went wrong', code=500)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 def get_games():
-    sys.stdout.write("Database microservice: /dbgetgames accessed\n")
+    logger.info("Database microservice: /dbgetgames accessed\n")
     for suser in users:
         if suser["AccessToken"] == request.form["AccessToken"]:
             return {"response": games}, 200
@@ -135,7 +143,7 @@ docs.register(get_games)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 @marshal_with(NoneSchema, description='Game already exists', code=402)
 def add_game():
-    sys.stdout.write("Database microservice: /dbaddgame accessed\n")
+    logger.info("Database microservice: /dbaddgame accessed\n")
     for suser in users:
         if suser["AccessToken"] == request.form["AccessToken"]:
             for game in games:
@@ -153,7 +161,7 @@ docs.register(add_game)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='Something went wrong', code=500)
 def remove_game():
-    sys.stdout.write("Database microservice: /dbremovegame accessed\n")
+    logger.info("Database microservice: /dbremovegame accessed\n")
     for suser in users:
         if suser["AccessToken"] == request.form["AccessToken"]:
             for i in range(len(games)):
@@ -177,7 +185,7 @@ def update_ip():
     global service_ip
     global service_name
     global users
-    sys.stdout.write("Database microservice: /dbupdate_ip accessed\n")
+    logger.info("Database microservice: /dbupdate_ip accessed\n")
     
     service_ip = request.form["ip"]
     
@@ -201,7 +209,7 @@ def config_update():
     global service_ip
     global service_name
     global users
-    sys.stdout.write("Database microservice: /dbconfig accessed\n")
+    logger.info("Database microservice: /dbconfig accessed\n")
     
     try:
         microservice = request.form["name"]
@@ -224,7 +232,7 @@ def get_config():
     global service_ip
     global service_name
     global users
-    sys.stdout.write("Database microservice: /dbgetconfig accessed\n")
+    logger.info("Database microservice: /dbgetconfig accessed\n")
     
     return {"response": str([ecostreet_core_service, configuration_core_service])}, 200
 docs.register(get_config)
@@ -234,7 +242,7 @@ docs.register(get_config)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='METRIC CHECK FAIL', code=500)
 def get_health():
-    sys.stdout.write("{'event':'Database microservice: /dbmetrics accessed\n'}")
+    logger.info("Database microservice: /dbmetrics accessed\n")
     start = datetime.datetime.now()
     try:
         url = 'http://' + configuration_core_service + '/cfhealthcheck'
@@ -265,7 +273,7 @@ docs.register(get_health)
 @app.route("/dbhealthcheck")
 @marshal_with(NoneSchema, description='200 OK', code=200)
 def send_health():
-    sys.stdout.write("Database microservice: /dbhealthcheck accessed\n")
+    logger.info("Database microservice: /dbhealthcheck accessed\n")
     try:
         url = 'http://' + ecostreet_core_service + '/lg'
         response = requests.get(url)
