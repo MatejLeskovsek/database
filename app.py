@@ -195,7 +195,7 @@ def update_ip():
     try:
         url = 'http://' + configuration_core_service + '/cfupdate'
         response = requests.post(url, data=data)
-        logger.info(response)
+        logger.info(response.text)
         return {"response": response.text}, 200
     except:
         return {"response": "Something went wrong."}, 500
