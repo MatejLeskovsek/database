@@ -11,6 +11,10 @@ from flask_cors import CORS, cross_origin
 import psutil
 import sys
 
+import logging
+import socket
+from logging.handlers import SysLogHandler
+
 app = Flask(__name__)
 app.config.update({
     'APISPEC_SWAGGER_URL': '/dbopenapi',
@@ -29,6 +33,13 @@ configuration_core_service = "configuration-core-service"
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
 
 games = [{"name":"1337", "date":"14.1.2022"}]
+
+class ContextFilter(logging.Filter):
+    hostname = socket.gethostname()
+    def filter(self, record):
+        record.hostname = ContextFilter.hostname
+        return True
+
 
 class NoneSchema(Schema):
     response = fields.Str()
@@ -50,6 +61,15 @@ docs.register(health)
 @app.route("/db")
 @marshal_with(NoneSchema, description='200 OK', code=200)
 def hello_world():
+    syslog = SysLogHandler(address=('logs3.papertrailapp.com', 17630))
+    syslog.addFilter(ContextFilter())
+    format = '%(asctime)s %(hostname)s Time: %(message)s'
+    formatter = logging.Formatter(format, datefmt='%b %d %H:%M:%S')
+    syslog.setFormatter(formatter)
+    logger = logging.getLogger()
+    logger.addHandler(syslog)
+    logger.setLevel(logging.INFO)
+    logger.info("This is my log.")
     return {"response": "Database microservice."}, 200
 docs.register(hello_world)
 
