@@ -159,10 +159,13 @@ def add_game():
                 if str(game["name"]) == str(request.form["name"]):
                     logger.info("Database microservice: /dbaddgame unable to create game\n")
                     return {"response": "Game already exists"}, 402
-            games.append({"name":request.form["name"], "date":request.form["date"]})
-            sys.stdout.write(games)
-            logger.info("Database microservice: /dbaddgame finished\n")
-            return {"response": "200 OK"}, 200
+            try:
+                games.append({"name":request.form["name"], "date":request.form["date"]})
+                logger.info("Database microservice: /dbaddgame finished\n")
+                return {"response": "200 OK"}, 200
+            except Exception as e:
+                logger.info("Database microservice: /dbaddgame hit an error\n")
+                return {"response": e}, 500
     logger.info("Database microservice: /dbaddgame unauthorized access\n")
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(add_game)
