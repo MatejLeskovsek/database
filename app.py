@@ -34,7 +34,7 @@ admin_core_service = "admin-core-service"
 
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
 
-games = [{"name":"Default event", "date":"2022-01-09"}]
+games = [{"name":"Default event", "date":"2022-01-09", "joined_users": ["0xf8423ab29c"]}]
 
 class ContextFilter(logging.Filter):
     hostname = socket.gethostname()
@@ -161,7 +161,7 @@ def add_game():
                     logger.info("Database microservice: /dbaddgame unable to create game\n")
                     return {"response": "Game already exists"}, 402
             try:
-                games.append({"name":request.form["name"], "date":request.form["date"]})
+                games.append({"name":request.form["name"], "date":request.form["date"], "joined_users": [str(request.form["AccessToken"])]})
                 logger.info("Database microservice: /dbaddgame finished\n")
                 return {"response": "200 OK"}, 200
             except Exception as e:
