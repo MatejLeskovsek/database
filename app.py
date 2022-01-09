@@ -151,6 +151,7 @@ docs.register(get_games)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 @marshal_with(NoneSchema, description='Game already exists', code=402)
+@marshal_with(NoneSchema, description='ERROR', code=500)
 def add_game():
     logger.info("Database microservice: /dbaddgame accessed\n")
     for suser in users:
