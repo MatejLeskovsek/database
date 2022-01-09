@@ -185,13 +185,12 @@ def remove_game():
                 game = games[i]
                 if str(game["name"]) == str(request.form["name"]):
                     games.pop(i)
-                    sys.stdout.write(games)
-            try:
-                logger.info("Database microservice: /dbremovegame finished\n")
-                return {"response": "200 OK"}, 200
-            except Exception as e:
-                logger.info("Database microservice: /dbremovegame hit an error\n")
-                return {"response": e}, 500
+                    try:
+                        logger.info("Database microservice: /dbremovegame finished\n")
+                        return {"response": "200 OK"}, 200
+                    except Exception as e:
+                        logger.info("Database microservice: /dbremovegame hit an error\n")
+                        return {"response": e}, 500
     logger.info("Database microservice: /dbremovegame unauthorized access\n")
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(remove_game)
