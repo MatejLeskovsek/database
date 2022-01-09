@@ -145,6 +145,24 @@ def get_games():
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(get_games)
 
+# USER JOIN
+@app.route("/dbjoingame", methods=["POST"])
+@use_kwargs({'name': fields.Str(), 'AccessToken':fields.Str()})
+@marshal_with(NoneSchema, description='200 OK', code=200)
+@marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
+def join_game():
+    logger.info("Database microservice: /dbjoingame accessed\n")
+    for suser in users:
+        if str(suser["AccessToken"]) == str(request.form["AccessToken"]):
+            for game in games:
+                if str(game["name"]) == str(request.form["name"]):
+                    game["joined_users"].append(str(request.form["AccessToken"]))
+                    logger.info("Database microservice: /dbjoingame finished\n")
+                    return {"response": "Game already exists"}, 200
+    logger.info("Database microservice: /dbjoingame unauthorized access\n")
+    return {"response": "UNAUTHORIZED"}, 401
+docs.register(join_game)
+
 # ADD GAME
 @app.route("/dbaddgame", methods=["POST"])
 @use_kwargs({'name': fields.Str(), 'date': fields.Str(), 'AccessToken':fields.Str()})
@@ -161,7 +179,7 @@ def add_game():
                     logger.info("Database microservice: /dbaddgame unable to create game\n")
                     return {"response": "Game already exists"}, 402
             try:
-                games.append({"name":request.form["name"], "date":request.form["date"], "joined_users": [str(request.form["AccessToken"])]})
+                games.append({"name":request.form["name"], "date":request.form["date"], "joined_users": []})
                 logger.info("Database microservice: /dbaddgame finished\n")
                 return {"response": "200 OK"}, 200
             except Exception as e:
