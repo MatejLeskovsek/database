@@ -34,7 +34,7 @@ admin_core_service = "admin-core-service"
 
 users = [{"username":"admin", "password":"admin", "AccessToken":"0x7ac93hd98s"},{"username":"matej", "password": "1337h4x0r", "AccessToken":"0xf8423ab29c"}]
 
-games = [{"name":"1337", "date":"14.1.2022"}]
+games = [{"name":"Default event", "date":"2022-01-09"}]
 
 class ContextFilter(logging.Filter):
     hostname = socket.gethostname()
