@@ -175,6 +175,7 @@ docs.register(add_game)
 @app.route("/dbremovegame", methods=["POST"])
 @use_kwargs({'name': fields.Str(), 'AccessToken':fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
+@marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 @marshal_with(NoneSchema, description='Something went wrong', code=500)
 def remove_game():
     logger.info("Database microservice: /dbremovegame accessed\n")
@@ -185,8 +186,12 @@ def remove_game():
                 if str(game["name"]) == str(request.form["name"]):
                     games.pop(i)
                     sys.stdout.write(games)
-            logger.info("Database microservice: /dbremovegame finished\n")
-            return {"response": "200 OK"}, 200
+            try:
+                logger.info("Database microservice: /dbremovegame finished\n")
+                return {"response": "200 OK"}, 200
+            except Exception as e:
+                logger.info("Database microservice: /dbremovegame hit an error\n")
+                return {"response": e}, 500
     logger.info("Database microservice: /dbremovegame unauthorized access\n")
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(remove_game)
