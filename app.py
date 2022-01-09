@@ -167,6 +167,27 @@ def join_game():
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(join_game)
 
+# USER LEAVE
+@app.route("/dbleavegame", methods=["POST"])
+@use_kwargs({'name': fields.Str(), 'AccessToken':fields.Str()})
+@marshal_with(NoneSchema, description='200 OK', code=200)
+@marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
+@marshal_with(NoneSchema, description='User exists', code=402)
+def leave_game():
+    logger.info("Database microservice: /dbleavegame accessed\n")
+    for suser in users:
+        if str(suser["AccessToken"]) == str(request.form["AccessToken"]):
+            for game in games:
+                if str(game["name"]) == str(request.form["name"]):
+                    for j in range(len(game["joined_users"])):
+                        if str(game["joined_users"][j]) == str(request.form["AccessToken"]):
+                            game["joined_users"].pop(j);
+                            logger.info("Database microservice: /dbleavegame finished\n")
+                            return {"response": "200 OK"}, 200
+    logger.info("Database microservice: /dbleavegame unauthorized access\n")
+    return {"response": "UNAUTHORIZED"}, 401
+docs.register(leave_game)
+
 # ADD GAME
 @app.route("/dbaddgame", methods=["POST"])
 @use_kwargs({'name': fields.Str(), 'date': fields.Str(), 'AccessToken':fields.Str()})
