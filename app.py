@@ -150,15 +150,19 @@ docs.register(get_games)
 @use_kwargs({'name': fields.Str(), 'AccessToken':fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
+@marshal_with(NoneSchema, description='User exists', code=402)
 def join_game():
     logger.info("Database microservice: /dbjoingame accessed\n")
     for suser in users:
         if str(suser["AccessToken"]) == str(request.form["AccessToken"]):
             for game in games:
                 if str(game["name"]) == str(request.form["name"]):
+                    for juser in game["joined_users"]:
+                        if str(juser) ==  str(request.form["AccessToken"]):
+                            return {"response": "User already exists"}, 402
                     game["joined_users"].append(str(request.form["AccessToken"]))
                     logger.info("Database microservice: /dbjoingame finished\n")
-                    return {"response": "Game already exists"}, 200
+                    return {"response": "200 OK"}, 200
     logger.info("Database microservice: /dbjoingame unauthorized access\n")
     return {"response": "UNAUTHORIZED"}, 401
 docs.register(join_game)
