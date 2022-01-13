@@ -151,7 +151,7 @@ def get_games():
 docs.register(get_games)
 
 # USER JOIN
-@app.route("/dbjoingame", methods=["POST"])
+@app.route("/dbjoingame", methods=["PUT"])
 @use_kwargs({'name': fields.Str(), 'AccessToken':fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
@@ -174,7 +174,7 @@ def join_game():
 docs.register(join_game)
 
 # USER LEAVE
-@app.route("/dbleavegame", methods=["POST"])
+@app.route("/dbleavegame", methods=["DELETE"])
 @use_kwargs({'name': fields.Str(), 'AccessToken':fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
@@ -223,7 +223,7 @@ def add_game():
 docs.register(add_game)
 
 # REMOVE GAME
-@app.route("/dbremovegame", methods=["POST"])
+@app.route("/dbremovegame", methods=["DELETE"])
 @use_kwargs({'name': fields.Str(), 'AccessToken':fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
@@ -249,7 +249,7 @@ docs.register(remove_game)
 
  
 # SERVICE IP UPDATE FUNCTION
-@app.route("/dbupdate_ip", methods = ['POST'])
+@app.route("/dbupdate_ip", methods = ['PUT'])
 @use_kwargs({'name': fields.Str(), 'ip': fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='Something went wrong', code=500)
@@ -276,7 +276,7 @@ def update_ip():
 docs.register(update_ip)
 
 # FUNCTION TO UPDATE IP'S OF OTHER SERVICES
-@app.route("/dbconfig", methods = ['POST'])
+@app.route("/dbconfig", methods = ['PUT'])
 @use_kwargs({'name': fields.Str(), 'ip': fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='Something went wrong', code=500)
