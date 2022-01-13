@@ -60,10 +60,14 @@ def not_found(e):
     return "The API call destination was not found.", 404
 
 
+def fallback_circuit():
+    logger.info("Database microservice: Circuit breaker fallback accessed")
+    return "The service is temporarily unavailable.", 500
+
 # HEALTH PAGE
 @app.route("/")
 @marshal_with(NoneSchema, description='200 OK', code=200)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def health():
     return {"response": "200"}, 200
 docs.register(health)
@@ -71,7 +75,7 @@ docs.register(health)
 # HOME PAGE
 @app.route("/db")
 @marshal_with(NoneSchema, description='200 OK', code=200)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def hello_world():
     return {"response": "Database microservice."}, 200
 docs.register(hello_world)
@@ -83,7 +87,7 @@ docs.register(hello_world)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 @marshal_with(NoneSchema, description='USER NOT FOUND', code=404)
 @marshal_with(NoneSchema, description='INTERNAL SERVER ERROR', code=500)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def login():
     global ecostreet_core_service
     global configuration_core_service
@@ -120,7 +124,7 @@ docs.register(login)
 @use_kwargs({'AccessToken': fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def authenticate_request():
     global users
     logger.info("Database microservice: /dbauthenticate accessed\n")
@@ -139,7 +143,7 @@ docs.register(authenticate_request)
 @use_kwargs({'AccessToken':fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def get_games():
     logger.info("Database microservice: /dbgetgames accessed\n")
     for suser in users:
@@ -156,7 +160,7 @@ docs.register(get_games)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 @marshal_with(NoneSchema, description='User exists', code=402)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def join_game():
     logger.info("Database microservice: /dbjoingame accessed\n")
     for suser in users:
@@ -179,7 +183,7 @@ docs.register(join_game)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 @marshal_with(NoneSchema, description='User exists', code=402)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def leave_game():
     logger.info("Database microservice: /dbleavegame accessed\n")
     for suser in users:
@@ -202,7 +206,7 @@ docs.register(leave_game)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 @marshal_with(NoneSchema, description='Game already exists', code=402)
 @marshal_with(NoneSchema, description='ERROR', code=500)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def add_game():
     logger.info("Database microservice: /dbaddgame accessed\n")
     for suser in users:
@@ -228,7 +232,7 @@ docs.register(add_game)
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='UNAUTHORIZED', code=401)
 @marshal_with(NoneSchema, description='Something went wrong', code=500)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def remove_game():
     logger.info("Database microservice: /dbremovegame accessed\n")
     for suser in users:
@@ -253,7 +257,7 @@ docs.register(remove_game)
 @use_kwargs({'name': fields.Str(), 'ip': fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='Something went wrong', code=500)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def update_ip():
     global ecostreet_core_service
     global configuration_core_service
@@ -280,7 +284,7 @@ docs.register(update_ip)
 @use_kwargs({'name': fields.Str(), 'ip': fields.Str()})
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='Something went wrong', code=500)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def config_update():
     global ecostreet_core_service
     global configuration_core_service
@@ -312,7 +316,7 @@ docs.register(config_update)
 # FUNCTION TO GET CURRENT CONFIG
 @app.route("/dbgetconfig")
 @marshal_with(NoneSchema, description='200 OK', code=200)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def get_config():
     global ecostreet_core_service
     global configuration_core_service
@@ -331,7 +335,7 @@ docs.register(get_config)
 @app.route("/dbmetrics")
 @marshal_with(NoneSchema, description='200 OK', code=200)
 @marshal_with(NoneSchema, description='METRIC CHECK FAIL', code=500)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def get_health():
     logger.info("Database microservice: /dbmetrics accessed\n")
     start = datetime.datetime.now()
@@ -366,7 +370,7 @@ docs.register(get_health)
 # HEALTH CHECK
 @app.route("/dbhealthcheck")
 @marshal_with(NoneSchema, description='200 OK', code=200)
-@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=not_found("circuit_break"))
+@circuit(failure_threshold=1, recovery_timeout=10, fallback_function=fallback_circuit)
 def send_health():
     logger.info("Database microservice: /dbhealthcheck accessed\n")
     try:
